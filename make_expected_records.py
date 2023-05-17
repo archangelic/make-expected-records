@@ -4,9 +4,8 @@ import sys
 
 # This script takes the output from `python main.py read ...` and puts into the format expected by expected_records.jsonl
 
-# give the output of the main.py read, and the filename you want to output to
+# give the output of the `main.py read ...`
 filename = sys.argv[1]
-out_filename = sys.argv[2]
 
 # read the input
 with open(filename) as r:
@@ -32,7 +31,7 @@ for s in streams:
     for x in stream:
         stream_records.append(x)
 
-# write to the output file
-with open(out_filename, 'w') as o:
-    o.write('\n'.join(stream_records))
-    o.write('\n')
+# print the output
+for r in stream_records:
+    print(r)
+
