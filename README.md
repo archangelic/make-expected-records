@@ -17,5 +17,5 @@ Options:
 Example usage:
 ```
 $ python main.py read --config secrets/config.json --catalog integration_tests/configured_catalog.json > expected_records.txt
-$ /path/to/make_expected_records.py expected_records.txt expected_records.jsonl
+$ /path/to/make_expected_records.py expected_records.txt > expected_records.jsonl
 ```
