@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-import sys
 
 import click
 
@@ -33,7 +32,7 @@ def parse_records(records, streams, number, _all):
     for s in parsed_records:
         streams_found.add(json.loads(s)['stream'])
 
-    # select up to 3 records as examples
+    # select records as examples
     for s in streams_found:
         if s in streams or not streams:
             stream = [x for x in parsed_records if json.loads(x)['stream'] == s]
