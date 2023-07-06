@@ -17,7 +17,7 @@ def split_streams(ctx, param, value):
 @click.option('--streams', '-s', callback=split_streams, help="Comma separated list of streams")
 @click.option('--number', '-n', type=int, default=3, show_default=True, help="Number of records per stream")
 @click.option('--all', '-a', '_all',  is_flag=True, help='Output all records for streams')
-def parse_records(records, streams, records_per_stream, _all):
+def parse_records(records, streams, number, _all):
     raw_records = records.readlines()
 
     # sort out only the records
@@ -38,7 +38,7 @@ def parse_records(records, streams, records_per_stream, _all):
         if s in streams or not streams:
             stream = [x for x in parsed_records if json.loads(x)['stream'] == s]
             if not _all:
-                stream = stream[:records_per_stream]
+                stream = stream[:number]
             for x in stream:
                 stream_records.append(x)
 
