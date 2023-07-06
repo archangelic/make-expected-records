@@ -13,9 +13,9 @@ def split_streams(ctx, param, value):
 
 @click.command()
 @click.argument('records', type=click.File('rb'))
-@click.option('--streams', '-s', callback=split_streams, help="Comma separated list of streams")
-@click.option('--number', '-n', type=int, default=3, show_default=True, help="Number of records per stream")
-@click.option('--all', '-a', '_all',  is_flag=True, help='Output all records for streams')
+@click.option('--streams', '-s', callback=split_streams, help="Comma separated list of streams.")
+@click.option('--number', '-n', type=int, default=3, show_default=True, help="Number of records per stream.")
+@click.option('--all', '-a', '_all',  is_flag=True, help='Output all records for streams.')
 def parse_records(records, streams, number, _all):
     raw_records = records.readlines()
 
@@ -25,21 +25,22 @@ def parse_records(records, streams, number, _all):
     for r in raw_records:
         line = json.loads(r.strip())
         if line['type'] == 'RECORD':
-            parsed_records.append(json.dumps(line['record']))
+            parsed_records.append(line['record'])
 
-    # get a set of stream names from the records
+    # get a set of stream names from output, only use specified streams
     streams_found = set()
-    for s in parsed_records:
-        streams_found.add(json.loads(s)['stream'])
+    for r in parsed_records:
+        stream_name = r['stream']
+        if stream_name in streams or not streams: # use all streams if there are none specified
+            streams_found.add(stream_name)
 
     # select records as examples
     for s in streams_found:
-        if s in streams or not streams:
-            stream = [x for x in parsed_records if json.loads(x)['stream'] == s]
-            if not _all:
-                stream = stream[:number]
-            for x in stream:
-                stream_records.append(x)
+        stream = [x for x in parsed_records if x['stream'] == s]
+        if not _all:
+            stream = stream[:number]
+        for x in stream:
+            stream_records.append(x)
 
     # print the output
     for r in stream_records:
